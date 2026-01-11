@@ -1,0 +1,63 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container my-5">
+    <h1 class="mb-4">Our Products</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form action="{{ route('products.index') }}" method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" name="search" class="form-control" placeholder="Search products..." value="{{ request('search') }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="category" class="form-select">
+                        <option value="">All Categories</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="sort" class="form-select">
+                        <option value="">Sort By</option>
+                        <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
+                        <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        @forelse($products as $product)
+        <div class="col-md-3 mb-4">
+            <div class="card product-card h-100">
+                <img src="{{ $product->image ? asset($product->image) : 'https://via.placeholder.com/300' }}" class="card-img-top" alt="{{ $product->name }}">
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">{{ $product->category->name }}</span>
+                    <h5 class="card-title">{{ $product->name }}</h5>
+                    <p class="card-text text-muted">{{ Str::limit($product->description, 60) }}</p>
+                    <p class="fw-bold text-primary fs-5">₱{{ number_format($product->price, 2) }}</p>
+                    <p class="text-muted small">Stock: {{ $product->stock }}</p>
+                    <a href="{{ route('products.show', $product->slug) }}" class="btn btn-primary w-100">View Details</a>
+                </div>
+            </div>
+        </div>
+        @empty
+        <div class="col-12">
+            <p class="text-center">No products found.</p>
+        </div>
+        @endforelse
+    </div>
+
+    <div class="d-flex justify-content-center">
+        {{ $products->links() }}
+    </div>
+</div>
+@endsection
