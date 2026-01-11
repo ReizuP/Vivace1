@@ -64,15 +64,3 @@ Visit: `http://localhost:8000`
 ## Full Setup Guide
 
 See [SETUP.md](SETUP.md) for detailed installation instructions.
-
-## Screenshots
-
-[Add screenshots of your application here]
-
-## License
-
-[Your License Here]
-
-## Contact
-
-[Your Contact Information]
