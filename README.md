@@ -32,8 +32,8 @@ A full-featured e-commerce platform for musical instruments built with Laravel.
 
 ```bash
 # Clone repository
-git clone <your-repo-url>
-cd vivace
+git clone https://github.com/ReizuP/Vivace1.git
+cd vivace1
 
 # Install dependencies
 composer install
