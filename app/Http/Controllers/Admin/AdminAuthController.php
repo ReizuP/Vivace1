@@ -41,4 +41,12 @@ class AdminAuthController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('admin.login');
     }
+
+    public function redirectHome()
+    {
+        if (auth()->guard('admin')->check()) {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('admin.login');
+    }
 }

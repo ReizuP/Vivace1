@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     // Admin Auth
+    Route::get('/', [AdminAuthController::class, 'redirectHome']);
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AdminAuthController::class, 'login']);
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
