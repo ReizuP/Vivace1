@@ -36,16 +36,16 @@
 
     <div class="row">
         @forelse($products as $product)
-        <div class="col-md-3 mb-4">
+        <div class="col-lg-3 col-md-3 col-sm-6 mb-4">
             <div class="card product-card h-100">
-                <img src="{{ $product->image ? asset($product->image) : 'https://via.placeholder.com/300' }}" class="card-img-top" alt="{{ $product->name }}">
-                <div class="card-body">
-                    <span class="badge bg-secondary mb-2">{{ $product->category->name }}</span>
-                    <h5 class="card-title">{{ $product->name }}</h5>
-                    <p class="card-text text-muted">{{ Str::limit($product->description, 60) }}</p>
-                    <p class="fw-bold text-primary fs-5">₱{{ number_format($product->price, 2) }}</p>
-                    <p class="text-muted small">Stock: {{ $product->stock }}</p>
-                    <a href="{{ route('products.show', $product->slug) }}" class="btn btn-primary w-100">View Details</a>
+                <img src="{{ $product->image ? asset($product->image) : 'https://via.placeholder.com/300' }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                    <span class="badge bg-secondary mb-2 align-self-start">{{ $product->category->name }}</span>
+                    <h6 class="card-title">{{ $product->name }}</h6>
+                    <p class="card-text text-muted small flex-grow-1">{{ Str::limit($product->description, 50) }}</p>
+                    <p class="fw-bold text-primary mb-1">₱{{ number_format($product->price, 2) }}</p>
+                    <p class="text-muted small mb-2">Stock: {{ $product->stock }}</p>
+                    <a href="{{ route('products.show', $product->slug) }}" class="btn btn-primary btn-sm w-100 mt-auto">View Details</a>
                 </div>
             </div>
         </div>

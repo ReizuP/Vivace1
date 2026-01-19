@@ -20,14 +20,14 @@
     <h2 class="text-center mb-4">Featured Products</h2>
     <div class="row">
         @foreach($featuredProducts as $product)
-        <div class="col-md-4 mb-4">
+        <div class="col-lg-3 col-md-3 col-sm-6 mb-4">
             <div class="card product-card h-100">
-                <img src="{{ $product->image ? asset($product->image) : 'https://via.placeholder.com/300' }}" class="card-img-top" alt="{{ $product->name }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $product->name }}</h5>
-                    <p class="card-text text-muted">{{ Str::limit($product->description, 80) }}</p>
-                    <p class="fw-bold text-primary">₱{{ number_format($product->price, 2) }}</p>
-                    <a href="{{ route('products.show', $product->slug) }}" class="btn btn-primary">View Details</a>
+                <img src="{{ $product->image ? asset($product->image) : 'https://via.placeholder.com/300' }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                    <h6 class="card-title">{{ $product->name }}</h6>
+                    <p class="card-text text-muted small">{{ Str::limit($product->description, 50) }}</p>
+                    <p class="fw-bold text-primary mt-auto">₱{{ number_format($product->price, 2) }}</p>
+                    <a href="{{ route('products.show', $product->slug) }}" class="btn btn-primary btn-sm">View Details</a>
                 </div>
             </div>
         </div>
