@@ -6,62 +6,96 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Payment;
+use App\Models\CartItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
-        $cart = session()->get('cart', []);
-        
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
-        }
-
-        // Validate cart before showing checkout
         $validatedCart = [];
         $total = 0;
         $errors = [];
 
-        foreach ($cart as $id => $item) {
-            $product = Product::find($id);
+        if (Auth::check()) {
+            // Database cart
+            $cartItems = CartItem::where('user_id', Auth::id())->with('product')->get();
             
-            if (!$product) {
-                $errors[] = "{$item['name']} is no longer available.";
-                continue;
+            if ($cartItems->isEmpty()) {
+                return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
             }
 
-            if ($product->stock < $item['quantity']) {
-                if ($product->stock > 0) {
-                    $errors[] = "Only {$product->stock} units of {$product->name} available.";
-                } else {
-                    $errors[] = "{$product->name} is out of stock.";
+            foreach ($cartItems as $cartItem) {
+                $product = $cartItem->product;
+                
+                if (!$product) {
+                    $errors[] = "A product is no longer available.";
                     continue;
                 }
+
+                if ($product->stock < $cartItem->quantity) {
+                    if ($product->stock > 0) {
+                        $errors[] = "Only {$product->stock} units of {$product->name} available.";
+                    } else {
+                        $errors[] = "{$product->name} is out of stock.";
+                        continue;
+                    }
+                }
+
+                $validatedCart[$product->id] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'quantity' => min($cartItem->quantity, $product->stock),
+                    'image' => $product->image,
+                ];
+
+                $total += $validatedCart[$product->id]['price'] * $validatedCart[$product->id]['quantity'];
+            }
+        } else {
+            // Session cart
+            $cart = session()->get('cart', []);
+            
+            if (empty($cart)) {
+                return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
             }
 
-            // Use current price from database
-            $validatedCart[$id] = [
-                'id' => $product->id,
-                'name' => $product->name,
-                'price' => $product->price,
-                'quantity' => min($item['quantity'], $product->stock),
-                'image' => $item['image'],
-            ];
+            foreach ($cart as $id => $item) {
+                $product = Product::find($id);
+                
+                if (!$product) {
+                    $errors[] = "{$item['name']} is no longer available.";
+                    continue;
+                }
 
-            $total += $validatedCart[$id]['price'] * $validatedCart[$id]['quantity'];
+                if ($product->stock < $item['quantity']) {
+                    if ($product->stock > 0) {
+                        $errors[] = "Only {$product->stock} units of {$product->name} available.";
+                    } else {
+                        $errors[] = "{$product->name} is out of stock.";
+                        continue;
+                    }
+                }
+
+                $validatedCart[$id] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'quantity' => min($item['quantity'], $product->stock),
+                    'image' => $item['image'],
+                ];
+
+                $total += $validatedCart[$id]['price'] * $validatedCart[$id]['quantity'];
+            }
         }
 
         // If there are errors, redirect back to cart
         if (!empty($errors)) {
-            session()->put('cart', $validatedCart);
             return redirect()->route('cart.index')->with('error', implode(' ', $errors));
         }
-
-        // Update cart with validated data
-        session()->put('cart', $validatedCart);
 
         $user = auth()->user();
         return view('checkout.index', compact('validatedCart', 'total', 'user'));
@@ -110,7 +144,24 @@ class CheckoutController extends Controller
         }
 
         $validated = $validator->validated();
-        $cart = session()->get('cart', []);
+        
+        // Get cart items
+        $cart = [];
+        if (Auth::check()) {
+            $cartItems = CartItem::where('user_id', Auth::id())->with('product')->get();
+            foreach ($cartItems as $cartItem) {
+                if ($cartItem->product) {
+                    $cart[$cartItem->product_id] = [
+                        'name' => $cartItem->product->name,
+                        'price' => $cartItem->product->price,
+                        'quantity' => $cartItem->quantity,
+                        'image' => $cartItem->product->image,
+                    ];
+                }
+            }
+        } else {
+            $cart = session()->get('cart', []);
+        }
         
         if (empty($cart)) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
@@ -252,7 +303,11 @@ class CheckoutController extends Controller
             ]);
 
             // Clear cart
-            session()->forget('cart');
+            if (Auth::check()) {
+                CartItem::where('user_id', Auth::id())->delete();
+            } else {
+                session()->forget('cart');
+            }
             
             DB::commit();
 
