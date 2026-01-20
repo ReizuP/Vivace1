@@ -70,20 +70,20 @@ class CheckoutController extends Controller
     public function process(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'shipping_name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
-            'shipping_phone' => 'required|string|regex:/^(\+63|0)?[0-9]{10}$/|max:20',
-            'shipping_address' => 'required|string|min:10|max:500',
-            'shipping_city' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
-            'shipping_postal_code' => 'required|string|regex:/^[0-9]{4}$/',
+            'shipping_name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s]+$/'],
+            'shipping_phone' => ['required', 'string', 'max:20', 'regex:/^(\+63|0)?[0-9]{10}$/'],
+            'shipping_address' => ['required', 'string', 'min:10', 'max:500'],
+            'shipping_city' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s]+$/'],
+            'shipping_postal_code' => ['required', 'string', 'regex:/^[0-9]{4}$/'],
             'payment_method' => ['required', 'in:cod,bank_transfer'],
             
             // Payment details for specific methods
-            'card_number' => 'required_if:payment_method,card|nullable|digits:16',
-            'card_name' => 'required_if:payment_method,card|nullable|string|max:255',
-            'card_expiry' => 'required_if:payment_method,card|nullable|regex:/^(0[1-9]|1[0-2])\/[0-9]{2}$/',
-            'card_cvv' => 'required_if:payment_method,card|nullable|digits:3',
+            'card_number' => ['required_if:payment_method,card', 'nullable', 'digits:16'],
+            'card_name' => ['required_if:payment_method,card', 'nullable', 'string', 'max:255'],
+            'card_expiry' => ['required_if:payment_method,card', 'nullable', 'regex:/^(0[1-9]|1[0-2])\/[0-9]{2}$/'],
+            'card_cvv' => ['required_if:payment_method,card', 'nullable', 'digits:3'],
             
-            'gcash_number' => 'required_if:payment_method,gcash|nullable|regex:/^(\+63|0)?[0-9]{10}$/|max:20',
+            'gcash_number' => ['required_if:payment_method,gcash', 'nullable', 'max:20', 'regex:/^(\+63|0)?[0-9]{10}$/'],
         ], [
             'shipping_name.required' => 'Name is required.',
             'shipping_name.regex' => 'Name should only contain letters and spaces.',
