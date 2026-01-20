@@ -67,10 +67,38 @@
                     <h6>Payment Information</h6>
                 </div>
                 <div class="card-body">
-                    <p class="mb-0">
+                    <p class="mb-1">
                         <strong>Method:</strong> 
-                        {{ $order->payment_method == 'cod' ? 'Cash on Delivery' : 'Bank Transfer' }}
+                        @switch($order->payment_method)
+                            @case('cod')
+                                Cash on Delivery
+                                @break
+                            @case('card')
+                                Credit/Debit Card
+                                @break
+                            @case('gcash')
+                                GCash
+                                @break
+                            @case('bank_transfer')
+                                Bank Transfer
+                                @break
+                            @default
+                                {{ ucwords(str_replace('_', ' ', $order->payment_method)) }}
+                        @endswitch
                     </p>
+                    @if($order->payment)
+                        <p class="mb-0">
+                            <strong>Status:</strong> 
+                            <span class="badge {{ $order->payment->status == 'completed' ? 'bg-success' : 'bg-warning' }}">
+                                {{ ucfirst($order->payment->status) }}
+                            </span>
+                        </p>
+                        @if($order->payment->transaction_id)
+                            <p class="mb-0 mt-2">
+                                <small class="text-muted">Transaction ID: {{ $order->payment->transaction_id }}</small>
+                            </p>
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>

@@ -60,7 +60,7 @@ class UserController extends Controller
     {
         $order = Order::where('user_id', auth()->id())
                      ->where('id', $id)
-                     ->with('items.product')
+                     ->with(['items.product', 'payment'])
                      ->firstOrFail();
 
         return view('user.order-details', compact('order'));
