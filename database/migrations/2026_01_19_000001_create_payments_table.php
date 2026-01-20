@@ -15,7 +15,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->string('status')->default('pending'); // pending, completed, failed, refunded
             $table->string('transaction_id')->nullable();
-            $table->text('payment_details')->nullable();
+            $table->json('payment_details')->nullable();
             $table->timestamps();
 
             $table->index('order_id');
