@@ -27,12 +27,23 @@ class ProductController extends Controller
             $query->where('category_id', $request->category);
         }
 
-        // Price sorting
+        // Sorting
         if ($request->has('sort')) {
-            if ($request->sort == 'price_asc') {
-                $query->orderBy('price', 'asc');
-            } elseif ($request->sort == 'price_desc') {
-                $query->orderBy('price', 'desc');
+            switch ($request->sort) {
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'name_asc':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('name', 'desc');
+                    break;
+                default:
+                    $query->latest();
             }
         } else {
             $query->latest();
