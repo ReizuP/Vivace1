@@ -1,9 +1,24 @@
 @extends('layouts.app')
 
+<style>
+    .form-control, .form-select {
+        background-color: var(--dark);
+        color: var(--primary);
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #a68a5c;
+        box-shadow: 0 0 0 0.2rem rgba(166, 138, 92, 0.25);
+    }
+</style>
+
 @section('content')
 <div class="container my-5">
     <h1 class="mb-4">Our Products</h1>
-    
+
     <div class="row mb-4">
         <div class="col-md-12">
             <form action="{{ route('products.index') }}" method="GET" class="row g-3">

@@ -7,18 +7,62 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #8B4513;
-            --secondary: #D2691E;
-            --dark: #2C1810;
+    :root {
+  --body-bg: #252525; /* Matte Black */
+  --body-color: #f5f0e8; /* Piano Ivory */
+
+  --primary: #a68a5c; /* Brass Gold */
+  --primary-rgb: 166, 138, 92;
+  --secondary: #3d2617; /* Mahogany */
+  --secondary-rgb: 61, 38, 23;
+
+  --dark: #0a0a0a; /* Glossy Ebony */
+  --light: #f5f0e8;
+
+
+  --border-color-translucent: rgba(255, 255, 255, 0.1);
+  --border-color: #6d6d6d;
+  /* Custom colors */
+  --color-card: #0a0a0a;
+  --color-muted: #262626;
+  --color-mute: #3d3d3d;
+  --color-muted-foreground: #b8a98f;
+
+  /* Custom effects */
+  --gradient-primary: linear-gradient(135deg, #a68a5c, #8a7249);
+  --gradient-hero: linear-gradient(180deg, rgba(10, 10, 10, 0.6), #1a1a1a);
+  --glow-primary: 0 0 40px rgba(166, 138, 92, 0.5);
+  --glow-secondary: 0 0 30px rgba(166, 138, 92, 0.3);
+
+  --bs-border-radius: 0.5rem;
+  --bs-border-radius-sm: 0.25rem;
+  --bs-border-radius-lg: 0.75rem;
+
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .navbar { background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%); }
-        .btn-primary { background-color: var(--primary); border-color: var(--primary); }
+        body { font-family: Playfair Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        background-color: var(--body-bg); color: var(--body-color); }
+        .navbar { background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);}
+        .navbar-brand{font-family: Playfair Display, serif; color: var(--light);}
+        .btn-primary { background-color: #B68C55; border-color: var(--border-color); }
         .btn-primary:hover { background-color: var(--secondary); border-color: var(--secondary); }
-        .footer { background-color: var(--dark); color: white; }
-        .product-card { transition: transform 0.3s; }
+        .footer { background-color: var(--color-mute); color: white; }
+        .product-card { transition: transform 0.3s; color:#0a0a0a;}
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .card{ background-color: var(--color-card); border-color: var(--border-color); color: var(--light);}
+        .card-body { background-color: var(--color-card); border-color: var(--border-color); color: var(--light); border-radius: var(--bs-border-radius-lg);}
+         p{ font-family: Lora, sans-serif; color: var(--light);}
+         h1, h4, h5 {font-family: Playfair Display, serif; color: var(--primary);}
+         h2{font-family: Playfair Display, serif; font-size:2.5rem; padding-bottom: 20px; color: var(--primary);}
+         h3{color: var(--light);}
+        .form-label { color: var(--light); font-family: Helvetica Neue, sans-serif; font-size: medium; }
+        .modal-body, .modal-header { background-color: var(--dark); color: var(--light); }
+        .nav-link { color: white !important; }
+        .nav-link:hover { color: var(--primary) !important; }
+        .navbar-nav .nav-item{margin-right:10px; font-weight: 500;}
+        .form-control { background-color: var(--color-mute); color: var(--light); border-color: var(--border-color); }
+        .form-control::placeholder { color: var(--color-muted-foreground); opacity: 0.7; font-style: oblique; font-size: medium; }
+
+
     </style>
     @yield('styles')
 </head>
@@ -26,7 +70,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold fs-3" href="{{ route('home') }}">
-                <i class="fas fa-music"></i> Vivace
+              <img src="{{ asset('images/products/LOGO.png') }}" alt="Vivace Logo" style="height: 40px; width: auto;"> VIVACE
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -92,11 +136,11 @@
     <footer class="footer mt-5 py-4">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4" id="foot-box">
                     <h5><i class="fas fa-music"></i> Vivace</h5>
                     <p>Your premier destination for quality musical instruments.</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" id="foot-box">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
                         <li><a href="{{ route('products.index') }}" class="text-white">Products</a></li>
@@ -104,7 +148,7 @@
                         <li><a href="{{ route('contact') }}" class="text-white">Contact</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" id="foot-box">
                     <h5>Contact Info</h5>
                     <p><i class="fas fa-envelope"></i> info@vivace.com</p>
                     <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
@@ -121,7 +165,7 @@
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: var(--primary); color: white;">
+                <div class="modal-header" style="background-color: var(--dark); color: var(--primary);">
                     <h5 class="modal-title" id="loginModalLabel">
                         <i class="fas fa-sign-in-alt me-2"></i>Login to Vivace
                     </h5>
@@ -152,7 +196,7 @@
                     <hr class="my-4">
                     <div class="text-center">
                         <p class="mb-0">
-                            Don't have an account? 
+                            Don't have an account?
                             <a href="#" class="text-primary fw-bold" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#registerModal">Register here</a>
                         </p>
                     </div>
@@ -204,7 +248,7 @@
                     <hr class="my-4">
                     <div class="text-center">
                         <p class="mb-0">
-                            Already have an account? 
+                            Already have an account?
                             <a href="#" class="text-primary fw-bold" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#loginModal">Login here</a>
                         </p>
                     </div>

@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-light py-5">
+<div class="bg--body-bg py-5">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <h1 class="display-4 fw-bold">Welcome to Vivace</h1>
+                <h1 class="display-4 fw-bold" id="main-vivace">Welcome to Vivace</h1>
                 <p class="lead">Discover the perfect instrument to bring your music to life</p>
                 <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg">Shop Now</a>
             </div>
             <div class="col-lg-6">
-                <img src="https://via.placeholder.com/500x400" alt="Music" class="img-fluid rounded">
+                <img src="{{ asset('images/products/Banner no text.png') }}" alt="Music" class="img-fluid rounded">
             </div>
         </div>
     </div>
