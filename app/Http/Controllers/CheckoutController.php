@@ -75,7 +75,7 @@ class CheckoutController extends Controller
             'shipping_address' => ['required', 'string', 'min:10', 'max:500'],
             'shipping_city' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s]+$/'],
             'shipping_postal_code' => ['required', 'string', 'regex:/^[0-9]{4}$/'],
-            'payment_method' => ['required', 'in:cod,bank_transfer'],
+            'payment_method' => ['required', 'in:cod,card,gcash,bank_transfer'],
             
             // Payment details for specific methods
             'card_number' => ['required_if:payment_method,card', 'nullable', 'digits:16'],

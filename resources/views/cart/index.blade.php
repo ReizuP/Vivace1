@@ -161,6 +161,13 @@
 const csrf = '{{ csrf_token() }}';
 
 function showToast(message, type = 'success') {
+    // Use the global showGlobalToast function if available
+    if (window.showGlobalToast) {
+        window.showGlobalToast(message, type);
+        return;
+    }
+    
+    // Fallback to local toast
     const toast = document.getElementById('cartToast');
     const toastBody = document.getElementById('toast-message');
     const toastHeader = toast.querySelector('.toast-header');
@@ -168,7 +175,7 @@ function showToast(message, type = 'success') {
     toastHeader.className = `toast-header bg-${type === 'success' ? 'success' : 'danger'} text-white`;
     toastBody.textContent = message;
     
-    const bsToast = new bootstrap.Toast(toast);
+    const bsToast = new window.bootstrap.Toast(toast);
     bsToast.show();
 }
 
