@@ -52,7 +52,7 @@
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .card{ background-color: var(--color-card); border-color: var(--border-color); color: var(--light);}
         .card-body { background-color: var(--color-card); border-color: var(--border-color); color: var(--light); border-radius: var(--bs-border-radius-lg);}
-         p{ font-family: Lora, sans-serif; color: var(--light);}
+         p{font-family: Lora, sans-serif; color: var(--light);}
          h1, h4, h5 {font-family: Playfair Display, serif; color: var(--primary);}
          h2{font-family: Playfair Display, serif; font-size:2.5rem; padding-bottom: 20px; color: var(--primary);}
          h3{color: var(--light);}
