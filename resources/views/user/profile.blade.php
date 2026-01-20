@@ -66,28 +66,44 @@
 
                         <hr>
 
-                        <h5>Change Password</h5>
+                        <h5 class="mb-3">Change Password</h5>
                         <p class="text-muted small">Leave blank if you don't want to change your password</p>
 
                         <div class="mb-3">
                             <label class="form-label">Current Password</label>
-                            <input type="password" name="current_password" class="form-control @error('current_password') is-invalid @enderror">
-                            @error('current_password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <div class="input-group">
+                                <input type="password" name="current_password" id="currentPassword" class="form-control @error('current_password') is-invalid @enderror">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleCurrentPassword">
+                                    <i class="fas fa-eye" id="currentPasswordIcon"></i>
+                                </button>
+                                @error('current_password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">New Password</label>
-                            <input type="password" name="new_password" class="form-control @error('new_password') is-invalid @enderror">
-                            @error('new_password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <div class="input-group">
+                                <input type="password" name="new_password" id="newPassword" class="form-control @error('new_password') is-invalid @enderror">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword">
+                                    <i class="fas fa-eye" id="newPasswordIcon"></i>
+                                </button>
+                                @error('new_password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <small class="text-muted">Minimum 8 characters</small>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Confirm New Password</label>
-                            <input type="password" name="new_password_confirmation" class="form-control">
+                            <div class="input-group">
+                                <input type="password" name="new_password_confirmation" id="confirmNewPassword" class="form-control">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleConfirmNewPassword">
+                                    <i class="fas fa-eye" id="confirmNewPasswordIcon"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update Profile</button>
@@ -97,4 +113,39 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+// Password visibility toggle for current password
+document.getElementById('toggleCurrentPassword').addEventListener('click', function() {
+    togglePasswordVisibility('currentPassword', 'currentPasswordIcon');
+});
+
+// Password visibility toggle for new password
+document.getElementById('toggleNewPassword').addEventListener('click', function() {
+    togglePasswordVisibility('newPassword', 'newPasswordIcon');
+});
+
+// Password visibility toggle for confirm new password
+document.getElementById('toggleConfirmNewPassword').addEventListener('click', function() {
+    togglePasswordVisibility('confirmNewPassword', 'confirmNewPasswordIcon');
+});
+
+// Reusable function for toggling password visibility
+function togglePasswordVisibility(inputId, iconId) {
+    const passwordInput = document.getElementById(inputId);
+    const passwordIcon = document.getElementById(iconId);
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.classList.remove('fa-eye');
+        passwordIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.classList.remove('fa-eye-slash');
+        passwordIcon.classList.add('fa-eye');
+    }
+}
+</script>
+@endpush
 @endsection
