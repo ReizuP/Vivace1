@@ -30,10 +30,15 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
-                                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required>
-                                @error('password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <input type="password" name="password" id="adminPassword" class="form-control @error('password') is-invalid @enderror" required>
+                                    <button class="btn btn-outline-secondary" type="button" id="toggleAdminPassword">
+                                        <i class="fas fa-eye" id="adminPasswordIcon"></i>
+                                    </button>
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <div class="mb-3 form-check">
@@ -52,5 +57,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+    // Password visibility toggle for admin login
+    document.getElementById('toggleAdminPassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('adminPassword');
+        const passwordIcon = document.getElementById('adminPasswordIcon');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordIcon.classList.remove('fa-eye');
+            passwordIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            passwordIcon.classList.remove('fa-eye-slash');
+            passwordIcon.classList.add('fa-eye');
+        }
+    });
+    </script>
 </body>
 </html>

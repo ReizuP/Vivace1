@@ -30,6 +30,7 @@ Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+Route::get('/cart/count', [CartController::class, 'getCount'])->name('cart.count');
 
 // Auth Routes
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
@@ -53,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     // Admin Auth
+    Route::get('/', [AdminAuthController::class, 'redirectHome']);
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AdminAuthController::class, 'login']);
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');

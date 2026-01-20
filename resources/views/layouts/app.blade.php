@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Vivace Music Shop')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
     :root {
   --body-bg: #252525; /* Matte Black */
@@ -180,7 +182,12 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                            <div class="input-group">
+                                <input type="password" name="password" id="modalLoginPassword" class="form-control" placeholder="Enter your password" required>
+                                <button class="btn btn-outline-secondary" type="button" id="toggleModalLoginPassword">
+                                    <i class="fas fa-eye" id="modalLoginPasswordIcon"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" name="remember" class="form-check-input" id="rememberMe">
@@ -232,11 +239,22 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" placeholder="Create a password" required>
+                            <div class="input-group">
+                                <input type="password" name="password" id="modalRegPassword" class="form-control" placeholder="Create a password" required>
+                                <button class="btn btn-outline-secondary" type="button" id="toggleModalRegPassword">
+                                    <i class="fas fa-eye" id="modalRegPasswordIcon"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted">Minimum 8 characters</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Confirm Password</label>
-                            <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm your password" required>
+                            <div class="input-group">
+                                <input type="password" name="password_confirmation" id="modalConfirmPassword" class="form-control" placeholder="Confirm your password" required>
+                                <button class="btn btn-outline-secondary" type="button" id="toggleModalConfirmPassword">
+                                    <i class="fas fa-eye" id="modalConfirmPasswordIcon"></i>
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100 mb-2">
                             <i class="fas fa-user-plus me-2"></i>Create Account
@@ -257,7 +275,41 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
+    {{-- <script src="{{ asset('js/cart-global.js') }}"></script> --}}
+    <script>
+    // Password toggle function for modals
+    function setupPasswordToggle(buttonId, inputId, iconId) {
+        const button = document.getElementById(buttonId);
+        if (button) {
+            button.addEventListener('click', function() {
+                const input = document.getElementById(inputId);
+                const icon = document.getElementById(iconId);
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        }
+    }
+
+    // Initialize modal password toggles when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Login modal
+        setupPasswordToggle('toggleModalLoginPassword', 'modalLoginPassword', 'modalLoginPasswordIcon');
+        
+        // Register modal
+        setupPasswordToggle('toggleModalRegPassword', 'modalRegPassword', 'modalRegPasswordIcon');
+        setupPasswordToggle('toggleModalConfirmPassword', 'modalConfirmPassword', 'modalConfirmPasswordIcon');
+    });
+    </script>
+    @stack('scripts')
     @yield('scripts')
 </body>
 </html>

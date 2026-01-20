@@ -34,14 +34,25 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required>
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <div class="input-group">
+                                <input type="password" name="password" id="registerPassword" class="form-control @error('password') is-invalid @enderror" required>
+                                <button class="btn btn-outline-secondary" type="button" id="toggleRegisterPassword">
+                                    <i class="fas fa-eye" id="registerPasswordIcon"></i>
+                                </button>
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <small class="text-muted">Minimum 8 characters</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Confirm Password</label>
-                            <input type="password" name="password_confirmation" class="form-control" required>
+                            <div class="input-group">
+                                <input type="password" name="password_confirmation" id="confirmPassword" class="form-control" required>
+                                <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                    <i class="fas fa-eye" id="confirmPasswordIcon"></i>
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Register</button>
                     </form>
@@ -53,4 +64,40 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+// Password visibility toggle for register password
+document.getElementById('toggleRegisterPassword').addEventListener('click', function() {
+    const passwordInput = document.getElementById('registerPassword');
+    const passwordIcon = document.getElementById('registerPasswordIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.classList.remove('fa-eye');
+        passwordIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.classList.remove('fa-eye-slash');
+        passwordIcon.classList.add('fa-eye');
+    }
+});
+
+// Password visibility toggle for confirm password
+document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+    const passwordInput = document.getElementById('confirmPassword');
+    const passwordIcon = document.getElementById('confirmPasswordIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.classList.remove('fa-eye');
+        passwordIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.classList.remove('fa-eye-slash');
+        passwordIcon.classList.add('fa-eye');
+    }
+});
+</script>
+@endpush
 @endsection
