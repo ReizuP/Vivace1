@@ -63,8 +63,26 @@
         .navbar-nav .nav-item{margin-right:10px; font-weight: 500;}
         .form-control { background-color: var(--color-mute); color: var(--light); border-color: var(--border-color); }
         .form-control::placeholder { color: var(--color-muted-foreground); opacity: 0.7; font-style: oblique; font-size: medium; }
+        .text-muted {color: #a8adb5 !important; /* Better visibility in dark mode */ }
+/* Toast Success Styling */
+.toast-header.bg-success {
+    background-color: var(--primary) !important;
+    border-bottom: 1px solid var(--primary);
+}
+.toast-body {
+    background-color: rgba(10, 10, 10, 0.8);
+    color: var(--light);
+}
 
-
+/* Alert Success Styling */
+.alert-success {
+    background-color: rgba(166, 138, 92, 0.15) !important;
+    border: 1px solid var(--primary) !important;
+    color: var(--primary) !important;
+}
+.alert-success .btn-close {
+    filter: brightness(1.5);
+}
     </style>
     @yield('styles')
 </head>
@@ -285,7 +303,7 @@
             button.addEventListener('click', function() {
                 const input = document.getElementById(inputId);
                 const icon = document.getElementById(iconId);
-                
+
                 if (input.type === 'password') {
                     input.type = 'text';
                     icon.classList.remove('fa-eye');
@@ -303,7 +321,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Login modal
         setupPasswordToggle('toggleModalLoginPassword', 'modalLoginPassword', 'modalLoginPasswordIcon');
-        
+
         // Register modal
         setupPasswordToggle('toggleModalRegPassword', 'modalRegPassword', 'modalRegPasswordIcon');
         setupPasswordToggle('toggleModalConfirmPassword', 'modalConfirmPassword', 'modalConfirmPasswordIcon');
