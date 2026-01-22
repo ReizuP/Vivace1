@@ -75,7 +75,15 @@
     background: var(--primary) !important;
     color: var(--light) !important;
 }
-
+.form-select{ /*filterbar*/
+    background-color: var(--color-muted);
+    color: var(--body-color);
+    border-color: var(--border-color);
+}
+option{ /*filterbar*/
+    background-color: var(--color-card);
+    color: var(--body-color);
+}
     * {
         transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
