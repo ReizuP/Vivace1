@@ -11,7 +11,7 @@
     [data-theme="dark"] {
         --body-bg: #1a1a1a; /* Charcoal / Near-black */
         --body-color: #f5f0e8; /* Piano Ivory */
-        --primary: #d4af37; /* Gold */
+        --primary: #8b6f47; /* Gold */
         --primary-rgb: 212, 175, 55;
         --primary-dark: #a68a5c; /* Darker Gold */
         --secondary: #8b6f47; /* Warm Brown */
@@ -24,7 +24,7 @@
         --color-muted: #2d2d2d;
         --color-mute: #3d3d3d;
         --color-muted-foreground: #b8a98f;
-        --gradient-primary: linear-gradient(135deg, #d4af37, #a68a5c);
+        --gradient-primary: linear-gradient(135deg, #8b6f47, #a68a5c);
         --gradient-hero: linear-gradient(180deg, rgba(10, 10, 10, 0.7), #1a1a1a);
         --glow-primary: 0 0 40px rgba(212, 175, 55, 0.4);
         --glow-secondary: 0 0 30px rgba(212, 175, 55, 0.2);
@@ -840,6 +840,12 @@
 
                     <ul class="navbar-nav align-items-center">
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('about.*') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('contact.*') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('cart.index') }}">
                             <i class="fas fa-shopping-cart"></i> Cart
                             @php
@@ -852,11 +858,6 @@
                                 <span class="badge bg-danger">{{ $cartCount }}</span>
                             @endif
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <button class="theme-toggle ms-2" id="themeToggle" aria-label="Toggle theme">
-                            <i class="fas fa-moon" id="themeIcon"></i>
-                        </button>
                     </li>
                     @auth
                         <li class="nav-item dropdown">
@@ -883,6 +884,11 @@
                             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a>
                         </li>
                     @endauth
+                    <li class="nav-item">
+                        <button class="theme-toggle ms-2" id="themeToggle" aria-label="Toggle theme">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                        </button>
+                    </li>
                     </ul>
                 </div>
             </div>
@@ -905,7 +911,7 @@
 
     @yield('content')
 
-    <footer class="footer">
+    <footer class="footer mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-md-3 mb-4">

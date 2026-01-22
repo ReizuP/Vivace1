@@ -24,15 +24,6 @@
                 <h6 class="card-title product-name mb-2">{{ $product->name }}</h6>
                 <p class="card-text text-muted small mb-2 flex-grow-1">{{ Str::limit($product->description, 60) }}</p>
                 
-                <div class="d-flex align-items-center mb-2">
-                    <div class="rating-stars text-warning">
-                        @for($i = 0; $i < 5; $i++)
-                            <i class="fas fa-star{{ $i < 4 ? '' : '-half-alt' }}"></i>
-                        @endfor
-                    </div>
-                    <small class="text-muted ms-2">(4.5)</small>
-                </div>
-                
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <p class="fw-bold mb-0 product-price">₱{{ number_format($product->price, 2) }}</p>
                     @if($product->stock > 0)
@@ -60,7 +51,7 @@
                 @if($product->stock > 0)
                     <form action="{{ route('cart.add', $product->id) }}" method="POST" class="mt-auto" onclick="event.stopPropagation();">
                         @csrf
-                        <button type="submit" class="btn btn-primary w-100 btn-sm">
+                        <button type="submit" class="btn btn-dark w-100 btn-sm">
                             <i class="fas fa-shopping-cart me-1"></i> Add to Cart
                         </button>
                     </form>

@@ -7,7 +7,7 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <form action="{{ route('products.index') }}" method="GET" class="row g-3" id="productFilters">
-                <div class="col-md-4 position-relative">
+                <div class="col-md-6 position-relative">
                     <input type="text" name="search" class="form-control" id="productPageSearch" placeholder="Search products..." value="{{ request('search') }}" autocomplete="off">
                     <div class="search-wrap">
                         <div class="search-autocomplete product-search-autocomplete" id="productPageSearchAutocomplete"></div>
