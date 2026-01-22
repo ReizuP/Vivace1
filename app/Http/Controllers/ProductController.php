@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function category(Category $category, Request $request)
+    {
+        // Merge category into request and reuse index flow
+        $request->merge(['category' => $category->id]);
+        return $this->index($request);
+    }
+
     public function index(Request $request)
     {
         $query = Product::with('category');
@@ -62,6 +69,16 @@ class ProductController extends Controller
                                   ->where('id', '!=', $product->id)
                                   ->take(4)
                                   ->get();
+
+        // Track recently viewed products
+        $recentlyViewed = session('recently_viewed', []);
+        // Remove if already exists
+        $recentlyViewed = array_diff($recentlyViewed, [$product->id]);
+        // Add to beginning
+        array_unshift($recentlyViewed, $product->id);
+        // Keep only last 20
+        $recentlyViewed = array_slice($recentlyViewed, 0, 20);
+        session(['recently_viewed' => $recentlyViewed]);
 
         return view('products.show', compact('product', 'relatedProducts'));
     }

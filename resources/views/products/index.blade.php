@@ -1,68 +1,43 @@
 @extends('layouts.app')
 
-<style>
-    .form-control, .form-select {
-        background-color: var(--dark);
-        color: var(--primary);
-        border: 1px solid #ced4da;
-        border-radius: 0.25rem;
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
-    }
-    .form-control:focus, .form-select:focus {
-        border-color: #a68a5c;
-        box-shadow: 0 0 0 0.2rem rgba(166, 138, 92, 0.25);
-    }
-</style>
-
 @section('content')
 <div class="container my-5">
-    <h1 class="mb-4">Our Products</h1>
+    <h1 class="mb-4">Products</h1>
 
     <div class="row mb-4">
         <div class="col-md-12">
-            <form action="{{ route('products.index') }}" method="GET" class="row g-3">
-                <div class="col-md-4">
-                    <input type="text" name="search" class="form-control" placeholder="Search products..." value="{{ request('search') }}">
+            <form action="{{ route('products.index') }}" method="GET" class="row g-3" id="productFilters">
+                <div class="col-md-4 position-relative">
+                    <input type="text" name="search" class="form-control" id="productPageSearch" placeholder="Search products..." value="{{ request('search') }}" autocomplete="off">
+                    <div class="search-wrap">
+                        <div class="search-autocomplete product-search-autocomplete" id="productPageSearchAutocomplete"></div>
+                    </div>
                 </div>
                 <div class="col-md-3">
-                    <select name="category" class="form-select">
+                    <select name="category" class="form-select" id="categorySelect">
                         <option value="">All Categories</option>
                         @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                            <option value="{{ $category->id }}" data-slug="{{ $category->slug }}" {{ request('category') == $category->id ? 'selected' : '' }}>
                                 {{ $category->name }}
                             </option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select name="sort" class="form-select">
+                    <select name="sort" class="form-select" id="sortSelect">
                         <option value="">Sort By</option>
                         <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
                         <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">Filter</button>
-                </div>
             </form>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row g-4">
         @forelse($products as $product)
-        <div class="col-lg-3 col-md-3 col-sm-6 mb-4">
-            <div class="card product-card h-100">
-                <img src="{{ $product->image ? asset($product->image) : 'https://via.placeholder.com/300' }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
-                <div class="card-body d-flex flex-column">
-                    <span class="badge bg-secondary mb-2 align-self-start">{{ $product->category->name }}</span>
-                    <h6 class="card-title">{{ $product->name }}</h6>
-                    <p class="card-text text-muted small flex-grow-1">{{ Str::limit($product->description, 50) }}</p>
-                    <p class="fw-bold text-primary mb-1">₱{{ number_format($product->price, 2) }}</p>
-                    <p class="text-muted small mb-2">Stock: {{ $product->stock }}</p>
-                    <a href="{{ route('products.show', $product->slug) }}" class="btn btn-primary btn-sm w-100 mt-auto">View Details</a>
-                </div>
-            </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <x-product-card :product="$product" />
         </div>
         @empty
         <div class="col-12">
@@ -75,4 +50,48 @@
         {{ $products->links() }}
     </div>
 </div>
+
+@push('scripts')
+<script>
+// Auto-apply filters (no manual Filter button)
+(function() {
+    const form = document.getElementById('productFilters');
+    const categorySelect = document.getElementById('categorySelect');
+    const sortSelect = document.getElementById('sortSelect');
+
+    if (!form) return;
+
+    // auto-submit on sort change
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => form.submit());
+    }
+
+    // auto-filter on category change:
+    // If a category is chosen, redirect to /products/category/{slug} to keep URLs clean.
+    if (categorySelect) {
+        categorySelect.addEventListener('change', () => {
+            const categoryId = categorySelect.value;
+            if (!categoryId) {
+                form.submit();
+                return;
+            }
+
+            const selected = categorySelect.options[categorySelect.selectedIndex];
+            const slug = selected ? selected.getAttribute('data-slug') : null;
+            if (slug) {
+                const params = new URLSearchParams(new FormData(form));
+                // remove category id; slug route handles it
+                params.delete('category');
+                const qs = params.toString();
+                window.location.href = `{{ url('/products/category') }}/${encodeURIComponent(slug)}${qs ? '?' + qs : ''}`;
+                return;
+            }
+
+            // fallback: submit query-based filter
+            form.submit();
+        });
+    }
+})();
+</script>
+@endpush
 @endsection

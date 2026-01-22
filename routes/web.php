@@ -18,7 +18,9 @@ use App\Http\Controllers\Admin\AdminUserController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/search/autocomplete', [HomeController::class, 'searchAutocomplete'])->name('search.autocomplete');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/category/{category:slug}', [ProductController::class, 'category'])->name('products.category');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
