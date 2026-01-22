@@ -62,6 +62,19 @@
         --bs-border-radius-sm: 0.25rem;
         --bs-border-radius-lg: 0.75rem;
     }
+.bg-primary{ /* login- modal header  */
+    background: var(--primary) !important;
+    color: var(--light) !important;
+
+}
+.card-header{
+    background: var(--primary) !important;
+    color: var(--light) !important;
+}
+#modal-header{
+    background: var(--primary) !important;
+    color: var(--light) !important;
+}
 
     * {
         transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
@@ -73,6 +86,7 @@
         color: var(--body-color);
         min-height: 100vh;
     }
+
 
     /* Navbar */
     .navbar {
@@ -379,9 +393,13 @@
         color: var(--body-color);
     }
 
-    h1, h4, h5 {
+    h1, h5, h4 {
         font-family: 'Playfair Display', serif;
         color: var(--primary);
+    }
+    #modal-title {
+        font-family: 'Playfair Display', serif;
+        color: var(--light) !important;
     }
 
     h2 {
@@ -998,7 +1016,7 @@
                     <div class="text-center">
                         <p class="mb-0">
                             Don't have an account?
-                            <a href="#" class="text-primary fw-bold" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#registerModal">Register here</a>
+                            <a href="#" class="text-primary fw-bold" id="link" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#registerModal">Register here</a>
                         </p>
                     </div>
                 </div>
@@ -1075,12 +1093,12 @@
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
         const html = document.documentElement;
-        
+
         // Get saved theme or default to dark
         const savedTheme = localStorage.getItem('theme') || 'dark';
         html.setAttribute('data-theme', savedTheme);
         updateThemeIcon(savedTheme);
-        
+
         themeToggle.addEventListener('click', function() {
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -1088,7 +1106,7 @@
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
         });
-        
+
         function updateThemeIcon(theme) {
             if (theme === 'dark') {
                 themeIcon.classList.remove('fa-sun');

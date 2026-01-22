@@ -8,9 +8,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #8B4513;
-            --secondary: #D2691E;
-            --dark: #2C1810;
+        --primary: #c9a961; /* Gold */
+        --primary-rgb: 212, 175, 55;
+        --primary-dark: #a68a5c; /* Darker Gold */
+        --secondary: #8b6f47; /* Warm Brown */
+        --secondary-rgb: 139, 111, 71;
+        --dark: #0a0a0a; /* Glossy Ebony */
+        --light: #f5f0e8;
+
+        }
+        body{
+            background-color: var(--primary) !important;
+            color: var(--dark);
         }
         .sidebar {
             min-height: 100vh;
@@ -31,6 +40,23 @@
             min-height: 100vh;
             background-color: #f8f9fa;
         }
+        h4{
+        font-family: 'Playfair Display', serif;
+        color: var(--light);
+        font-size: 1.7rem;
+        }
+        h5{
+        font-family: 'Playfair Display', serif;
+        font-weight: bold
+        }
+        h2, h3, h6, h1{
+        font-family: 'Playfair Display', serif;
+        }
+
+        #sidebar-icon {
+            margin-right: 10px;
+        color: var(--primary-dark) !important;
+        }
     </style>
     @yield('styles')
 </head>
@@ -38,32 +64,32 @@
     <div class="d-flex">
         <div class="sidebar text-white" style="width: 250px;">
             <div class="p-3 text-center border-bottom">
-                <h4><i class="fas fa-music"></i> Vivace Admin</h4>
+                <h4><i class="fas fa-music" id="sidebar-icon"></i> Vivace Admin</h4>
             </div>
             <div class="mt-3">
                 <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-chart-line"></i> Dashboard
+                    <i class="fas fa-chart-line"id="sidebar-icon"></i> Dashboard
                 </a>
                 <a href="{{ route('admin.categories.index') }}" class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-                    <i class="fas fa-folder"></i> Categories
+                    <i class="fas fa-folder"id="sidebar-icon"></i> Categories
                 </a>
                 <a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
-                    <i class="fas fa-box"></i> Products
+                    <i class="fas fa-box"id="sidebar-icon"></i> Products
                 </a>
                 <a href="{{ route('admin.orders.index') }}" class="{{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
-                    <i class="fas fa-shopping-cart"></i> Orders
+                    <i class="fas fa-shopping-cart"id="sidebar-icon"></i> Orders
                 </a>
                 <a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                    <i class="fas fa-users"></i> Users
+                    <i class="fas fa-users"id="sidebar-icon"></i> Users
                 </a>
                 <hr class="bg-white">
                 <a href="{{ route('home') }}" target="_blank">
-                    <i class="fas fa-external-link-alt"></i> View Website
+                    <i class="fas fa-external-link-alt" id="sidebar-icon"></i> View Website
                 </a>
                 <form action="{{ route('admin.logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-link text-white text-start w-100" style="text-decoration: none; padding: 10px 20px;">
-                        <i class="fas fa-sign-out-alt"></i> Logout
+                        <i class="fas fa-sign-out-alt" id="sidebar-icon"></i> Logout
                     </button>
                 </form>
             </div>

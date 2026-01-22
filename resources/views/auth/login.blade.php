@@ -6,7 +6,7 @@
         <div class="col-md-5">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Login</h4>
+                    <h4 class="mb-0" id="modal-title">Login</h4>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('login') }}" method="POST">
@@ -37,7 +37,7 @@
                         <button type="submit" class="btn btn-primary w-100">Login</button>
                     </form>
                     <div class="text-center mt-3">
-                        <p>Don't have an account? <a href="{{ route('register') }}">Register here</a></p>
+                        <p>Don't have an account? <a href="{{ route('register') }}" id="link">Register here</a></p>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
 document.getElementById('toggleLoginPassword').addEventListener('click', function() {
     const passwordInput = document.getElementById('loginPassword');
     const passwordIcon = document.getElementById('loginPasswordIcon');
-    
+
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
         passwordIcon.classList.remove('fa-eye');

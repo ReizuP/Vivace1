@@ -46,10 +46,10 @@
                                 <button class="btn btn-outline-secondary qty-btn" type="button" onclick="updateQuantity({{ $id }}, 'decrease')" {{ !$product || $product->stock <= 0 ? 'disabled' : '' }}>
                                     <i class="fas fa-minus"></i>
                                 </button>
-                                <input type="number" 
-                                       class="form-control text-center quantity-input" 
-                                       value="{{ $item['quantity'] }}" 
-                                       min="1" 
+                                <input type="number"
+                                       class="form-control text-center quantity-input"
+                                       value="{{ $item['quantity'] }}"
+                                       min="1"
                                        max="{{ $product ? $product->stock : $item['quantity'] }}"
                                        data-id="{{ $id }}"
                                        onchange="updateQuantityInput({{ $id }})"
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     @endforeach
-                    
+
                     <div class="mt-3">
                         <button class="btn btn-outline-danger" onclick="clearCart()">
                             <i class="fas fa-trash-alt"></i> Clear Cart
@@ -83,8 +83,8 @@
         </div>
         <div class="col-md-4">
             <div class="card sticky-top" style="top: 20px;">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Order Summary</h5>
+                <div class="card-header bg-primary text-white" >
+                    <h5 class="mb-0" id="modal-title">Order Summary</h5>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
@@ -100,7 +100,7 @@
                         <strong>Total:</strong>
                         <strong class="text-primary fs-4">₱<span id="cart-total">{{ number_format($total, 2) }}</span></strong>
                     </div>
-                    
+
                     @php
                         $hasOutOfStock = false;
                         foreach($cart as $id => $item) {
@@ -111,13 +111,13 @@
                             }
                         }
                     @endphp
-                    
+
                     <div id="stock-warning" class="alert alert-danger mb-3" style="display: {{ $hasOutOfStock ? 'block' : 'none' }}">
                         <small>Please remove out-of-stock items before checkout.</small>
                     </div>
-                    
+
                     @auth
-                        <a href="{{ route('checkout.index') }}" 
+                        <a href="{{ route('checkout.index') }}"
                            id="checkout-btn"
                            class="btn btn-primary w-100 {{ $hasOutOfStock ? 'disabled' : '' }}"
                            {{ $hasOutOfStock ? 'aria-disabled=true' : '' }}>
@@ -166,15 +166,15 @@ function showToast(message, type = 'success') {
         window.showGlobalToast(message, type);
         return;
     }
-    
+
     // Fallback to local toast
     const toast = document.getElementById('cartToast');
     const toastBody = document.getElementById('toast-message');
     const toastHeader = toast.querySelector('.toast-header');
-    
+
     toastHeader.className = `toast-header bg-${type === 'success' ? 'success' : 'danger'} text-white`;
     toastBody.textContent = message;
-    
+
     const bsToast = new window.bootstrap.Toast(toast);
     bsToast.show();
 }
@@ -184,7 +184,7 @@ function updateCartUI(data) {
         document.getElementById('cart-total').textContent = parseFloat(data.cartTotal).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         document.getElementById('cart-subtotal').textContent = parseFloat(data.cartTotal).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    
+
     if (data.cartCount !== undefined) {
         document.getElementById('cart-count').textContent = data.cartCount;
         const badge = document.querySelector('.navbar .badge');
@@ -203,7 +203,7 @@ function updateQuantity(id, action) {
     const input = document.querySelector(`input[data-id="${id}"]`);
     let currentQty = parseInt(input.value);
     const max = parseInt(input.max);
-    
+
     if (action === 'increase' && currentQty < max) {
         currentQty++;
     } else if (action === 'decrease' && currentQty > 1) {
@@ -211,7 +211,7 @@ function updateQuantity(id, action) {
     } else {
         return;
     }
-    
+
     input.value = currentQty;
     updateCart(id, currentQty);
 }
@@ -220,7 +220,7 @@ function updateQuantityInput(id) {
     const input = document.querySelector(`input[data-id="${id}"]`);
     const qty = parseInt(input.value);
     const max = parseInt(input.max);
-    
+
     if (isNaN(qty) || qty < 1) {
         input.value = 1;
         updateCart(id, 1);
@@ -236,7 +236,7 @@ function updateQuantityInput(id) {
 function updateCart(id, quantity) {
     // Disable all quantity buttons during update
     document.querySelectorAll('.qty-btn').forEach(btn => btn.disabled = true);
-    
+
     fetch(`/cart/update/${id}`, {
         method: 'POST',
         headers: {
@@ -255,14 +255,14 @@ function updateCart(id, quantity) {
                 const itemTotal = itemElement.querySelector('.item-total');
                 itemTotal.textContent = parseFloat(data.itemTotal).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
-            
+
             // Update cart totals
             updateCartUI(data);
-            
+
             showToast(data.message);
         } else {
             showToast(data.message, 'danger');
-            
+
             // Revert quantity on error
             if (data.maxStock) {
                 document.querySelector(`input[data-id="${id}"]`).value = data.maxStock;
@@ -281,7 +281,7 @@ function updateCart(id, quantity) {
 
 function removeItem(id) {
     if (!confirm('Remove this item from cart?')) return;
-    
+
     fetch(`/cart/remove/${id}`, {
         method: 'DELETE',
         headers: {
@@ -298,10 +298,10 @@ function removeItem(id) {
             if (itemElement) {
                 itemElement.remove();
             }
-            
+
             // Update cart UI
             updateCartUI(data);
-            
+
             // Show empty cart message if no items left
             if (data.isEmpty) {
                 document.getElementById('cart-content').innerHTML = `
@@ -315,7 +315,7 @@ function removeItem(id) {
                     </div>
                 `;
             }
-            
+
             showToast(data.message);
         } else {
             showToast(data.message, 'danger');
@@ -329,7 +329,7 @@ function removeItem(id) {
 
 function clearCart() {
     if (!confirm('Are you sure you want to clear your cart?')) return;
-    
+
     fetch('/cart/clear', {
         method: 'DELETE',
         headers: {
