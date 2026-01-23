@@ -48,24 +48,11 @@
             <h1 id="heroTitle">Quality You Can Trust</h1>
             <p id="heroSubtitle">100% authentic instruments from trusted brands worldwide.</p>
             
-            <!-- Hero Search Bar -->
-            <div class="hero-search">
-                <form action="{{ route('products.index') }}" method="GET" id="heroSearchForm">
-                    <div class="input-group input-group-lg position-relative">
-                        <input type="text" 
-                               class="form-control" 
-                               name="search" 
-                               id="heroSearch" 
-                               placeholder="Search for guitars, keyboards, drums..." 
-                               autocomplete="off">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fas fa-search"></i> Search
-                        </button>
-                    </div>
-                </form>
-                <div class="search-wrap">
-                    <div class="search-autocomplete hero-search-autocomplete" id="heroSearchAutocomplete"></div>
-                </div>
+            <!-- Hero Call-to-Action Button -->
+            <div class="hero-cta mt-4">
+                <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg px-5 py-3">
+                    <i class="fas fa-guitar me-2"></i> Explore Our Products
+                </a>
             </div>
         </div>
     </div>
@@ -284,19 +271,6 @@ if (heroSlider) {
         }, 5000);
     });
 }
-
-// Hero Search Autocomplete
-(function() {
-    const heroSearchInput = document.getElementById('heroSearch');
-    if (heroSearchInput) {
-        heroSearchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                document.getElementById('heroSearchForm').submit();
-            }
-        });
-    }
-})();
 
 // Auto-rotate hero text every 5s
 setInterval(() => {
