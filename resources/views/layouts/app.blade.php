@@ -62,14 +62,36 @@
         --bs-border-radius-sm: 0.25rem;
         --bs-border-radius-lg: 0.75rem;
     }
-.bg-primary{ /* login- modal header  */
-    background: var(--primary) !important;
+.bg-primary{ /* card headers - checkout, register */
+    background: var(--dark) !important;
     color: var(--light) !important;
 
 }
 .card-header{
-    background: var(--primary) !important;
+    background: var(--dark) !important;
     color: var(--light) !important;
+}
+.card-header h4,
+.card-header h5,
+.card-header h6 {
+    color: var(--light) !important;
+}
+.card-header i,
+.card-header .fas,
+.card-header .far,
+.card-header .fab {
+    color: var(--primary) !important;
+}
+.bg-primary h4,
+.bg-primary h5,
+.bg-primary h6 {
+    color: var(--light) !important;
+}
+.bg-primary i,
+.bg-primary .fas,
+.bg-primary .far,
+.bg-primary .fab {
+    color: var(--primary) !important;
 }
 #modal-header{
     background: var(--primary) !important;
@@ -1141,7 +1163,7 @@ option{ /*filterbar*/
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: var(--dark); color: var(--primary);">
+                <div class="modal-header" style="bg-primary text-white">
                     <h5 class="modal-title" id="loginModalLabel">
                         <i class="fas fa-sign-in-alt me-2"></i>Login to Vivace
                     </h5>
@@ -1190,7 +1212,7 @@ option{ /*filterbar*/
     <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: var(--primary); color: white;">
+                <div class="modal-header" style="bg-primary text-white">
                     <h5 class="modal-title" id="registerModalLabel">
                         <i class="fas fa-user-plus me-2"></i>Create Account
                     </h5>
