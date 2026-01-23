@@ -26,6 +26,8 @@
                 <div class="col-md-3">
                     <select name="sort" class="form-select" id="sortSelect">
                         <option value="">Sort By</option>
+                        <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Name: A-Z</option>
+                        <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Name: Z-A</option>
                         <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
                         <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
                     </select>
@@ -46,8 +48,59 @@
         @endforelse
     </div>
 
-    <div class="d-flex justify-content-center">
-        {{ $products->links() }}
+    <div class="d-flex justify-content-center mt-4">
+        @if ($products->hasPages())
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {{-- Previous Page Link --}}
+                    @if ($products->onFirstPage())
+                        <li class="page-item disabled" aria-disabled="true">
+                            <span class="page-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </span>
+                        </li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- Pagination Elements --}}
+                    @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                        @if ($page == $products->currentPage())
+                            <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
+                        @else
+                            <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                        @endif
+                    @endforeach
+
+                    {{-- Next Page Link --}}
+                    @if ($products->hasMorePages())
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </a>
+                        </li>
+                    @else
+                        <li class="page-item disabled" aria-disabled="true">
+                            <span class="page-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </span>
+                        </li>
+                    @endif
+                </ul>
+            </nav>
+        @endif
     </div>
 </div>
 

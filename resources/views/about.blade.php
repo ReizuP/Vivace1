@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'About Us - Vivace')
+
 @section('content')
 <div class="container my-5">
     <h1 class="mb-4">About Vivace Music Shop</h1>
@@ -29,4 +31,3 @@
     </div>
 </div>
 @endsection
-</html>

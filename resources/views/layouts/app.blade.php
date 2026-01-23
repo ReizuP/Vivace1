@@ -792,6 +792,106 @@ option{ /*filterbar*/
         background: linear-gradient(135deg, #e7dcc8, #f6f1e7);
     }
 
+    /* Fixed Product Card Heights */
+    .product-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 400px; /* Reduced from 500px */
+    }
+
+    .product-card .card-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .product-card .product-name {
+        min-height: 2.5em;
+        line-height: 1.25em;
+    }
+
+    .product-card .card-text {
+        min-height: 2.5em; /* Reduced from 3em */
+        line-height: 1.5em;
+    }
+
+    .product-card-wrapper {
+        height: 100%;
+    }
+
+    /* Image to Details Ratio - 60/40 split */
+    .product-image-wrapper {
+        flex: 0 0 auto;
+    }
+
+    .product-card .product-image,
+    .product-card .product-image-placeholder {
+        height: 200px !important; /* Reduced from 250px for better ratio */
+    }
+
+    /* Pagination Styling */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin: 2rem 0;
+    }
+
+    .pagination .page-item {
+        list-style: none;
+    }
+
+    .pagination .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        height: 40px;
+        padding: 0.5rem;
+        border: 2px solid var(--border-color);
+        background-color: var(--color-card);
+        color: var(--body-color);
+        text-decoration: none;
+        border-radius: var(--bs-border-radius);
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .pagination .page-link:hover {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: var(--light);
+        transform: translateY(-2px);
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: var(--light);
+        box-shadow: var(--glow-secondary);
+    }
+
+    .pagination .page-item.disabled .page-link {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background-color: var(--color-muted);
+        color: var(--color-muted-foreground);
+    }
+
+    .pagination .page-item.disabled .page-link:hover {
+        transform: none;
+        background-color: var(--color-muted);
+        border-color: var(--border-color);
+    }
+
+    /* Pagination Arrow Icons */
+    .pagination .page-link svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
         .hero-content h1 {
@@ -817,6 +917,60 @@ option{ /*filterbar*/
         .navbar-search form {
             width: 100%;
         }
+
+        /* Mobile Product Cards */
+        .product-card {
+            min-height: 380px; /* Reduced from 450px */
+        }
+
+        .product-card .product-image,
+        .product-card .product-image-placeholder {
+            height: 180px !important; /* Slightly smaller on tablet */
+        }
+
+        /* Mobile Navbar */
+        .navbar .container {
+            flex-wrap: wrap;
+        }
+
+        .navbar-collapse {
+            margin-top: 1rem;
+        }
+
+        /* Stack navbar items vertically on mobile */
+        .navbar-nav {
+            width: 100%;
+        }
+
+        .navbar-nav .nav-item {
+            margin-right: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Mobile search positioning */
+        .navbar-search {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .product-card {
+            min-height: 360px; /* Reduced from 420px */
+        }
+
+        .product-card .product-image,
+        .product-card .product-image-placeholder {
+            height: 170px !important; /* Even smaller on mobile */
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        .category-card {
+            min-height: auto;
+        }
     }
     </style>
     @yield('styles')
@@ -836,15 +990,6 @@ option{ /*filterbar*/
             <!-- Right: Nav + Search + Actions -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="d-flex align-items-center justify-content-end gap-3 w-100">
-                    <ul class="navbar-nav align-items-center">
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">Products</a>
-                        </li>
-                    </ul>
-
                     <div class="navbar-search">
                         <div class="search-wrap">
                             <form action="{{ route('products.index') }}" method="GET" id="searchForm">
@@ -863,14 +1008,23 @@ option{ /*filterbar*/
                             <div class="search-autocomplete" id="searchAutocomplete"></div>
                         </div>
                     </div>
+                    
+                    <ul class="navbar-nav align-items-center">
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
+                        </li>
+                    </ul>
 
                     <ul class="navbar-nav align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('about.*') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('contact.*') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('cart.index') }}">
                             <i class="fas fa-shopping-cart"></i> Cart

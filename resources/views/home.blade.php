@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'VIVACE - Premium Musical Instruments')
+@section('title', 'Vivace - Premium Musical Instruments')
 
 @section('content')
 <!-- Breadcrumb Navigation -->
