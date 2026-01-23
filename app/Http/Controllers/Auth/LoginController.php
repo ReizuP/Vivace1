@@ -30,7 +30,26 @@ class LoginController extends Controller
             // Sync session cart to database
             CartController::syncSessionCartToDatabase(Auth::id());
             
+            // Handle AJAX requests from modal
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Welcome back!',
+                    'redirect' => route('home')
+                ]);
+            }
+            
             return redirect()->intended(route('home'))->with('success', 'Welcome back!');
+        }
+
+        // Handle AJAX requests from modal
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => false,
+                'errors' => [
+                    'email' => ['The provided credentials do not match our records.']
+                ]
+            ], 422);
         }
 
         return back()->withErrors([

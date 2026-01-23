@@ -43,9 +43,14 @@
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
-                <button type="submit" class="btn btn-primary btn-lg" id="addToCartBtn">
-                    <i class="fas fa-cart-plus"></i> Add to Cart
-                </button>
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg flex-fill flex-sm-grow-0" id="addToCartBtn" style="min-width: 160px;">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                    <button type="button" class="btn btn-success btn-lg flex-fill flex-sm-grow-0" id="buyNowBtn" style="min-width: 160px;">
+                        <i class="fas fa-bolt"></i> Buy Now
+                    </button>
+                </div>
             </form>
             @else
             <div class="alert alert-danger mt-4">Out of Stock</div>
@@ -188,6 +193,57 @@ document.getElementById('quantity').addEventListener('input', function() {
         this.value = maxStock;
         showToast(`Only ${maxStock} units available`, 'danger');
     }
+});
+
+// Buy Now functionality
+document.getElementById('buyNowBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    @guest
+    // If user is not logged in, redirect to login with return URL
+    const returnUrl = encodeURIComponent('{{ route("products.show", $product->slug) }}');
+    window.location.href = `{{ route('login') }}?redirect=${returnUrl}&buy_now=1&quantity=${document.getElementById('quantity').value}`;
+    return;
+    @endguest
+    
+    const btn = this;
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+    
+    const quantity = document.getElementById('quantity').value;
+    const productId = {{ $product->id }};
+    
+    // Add to cart first
+    fetch(`/cart/add/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ quantity: quantity })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update cart badge
+            updateCartBadge(data.cartCount);
+            
+            // Redirect to checkout
+            window.location.href = '{{ route("checkout.index") }}';
+        } else {
+            showToast(data.message, 'danger');
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Failed to process. Please try again.', 'danger');
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    });
 });
 </script>
 @endpush

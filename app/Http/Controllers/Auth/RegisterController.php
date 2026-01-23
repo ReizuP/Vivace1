@@ -36,6 +36,15 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
+        // Handle AJAX requests from modal
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Registration successful!',
+                'redirect' => route('home')
+            ]);
+        }
+
         return redirect()->route('home')->with('success', 'Registration successful!');
     }
 }

@@ -63,7 +63,7 @@
                         </li>
                     @else
                         <li class="page-item">
-                            <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev">
+                            <a class="page-link" href="{{ $products->appends(request()->query())->previousPageUrl() }}" rel="prev">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="15 18 9 12 15 6"></polyline>
                                 </svg>
@@ -72,7 +72,7 @@
                     @endif
 
                     {{-- Pagination Elements --}}
-                    @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                    @foreach ($products->appends(request()->query())->getUrlRange(1, $products->lastPage()) as $page => $url)
                         @if ($page == $products->currentPage())
                             <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
                         @else
@@ -83,7 +83,7 @@
                     {{-- Next Page Link --}}
                     @if ($products->hasMorePages())
                         <li class="page-item">
-                            <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next">
+                            <a class="page-link" href="{{ $products->appends(request()->query())->nextPageUrl() }}" rel="next">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="9 18 15 12 9 6"></polyline>
                                 </svg>

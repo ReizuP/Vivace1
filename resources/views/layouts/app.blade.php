@@ -1170,7 +1170,11 @@ option{ /*filterbar*/
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form action="{{ route('login') }}" method="POST">
+                    <div id="loginErrorAlert" class="alert alert-danger d-none" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span id="loginErrorMessage"></span>
+                    </div>
+                    <form id="modalLoginForm" action="{{ route('login') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label">Email Address</label>
@@ -1219,7 +1223,11 @@ option{ /*filterbar*/
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form action="{{ route('register') }}" method="POST">
+                    <div id="registerErrorAlert" class="alert alert-danger d-none" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span id="registerErrorMessage"></span>
+                    </div>
+                    <form id="modalRegisterForm" action="{{ route('register') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label">Full Name</label>
@@ -1500,6 +1508,159 @@ option{ /*filterbar*/
         setupPasswordToggle('toggleModalLoginPassword', 'modalLoginPassword', 'modalLoginPasswordIcon');
         setupPasswordToggle('toggleModalRegPassword', 'modalRegPassword', 'modalRegPasswordIcon');
         setupPasswordToggle('toggleModalConfirmPassword', 'modalConfirmPassword', 'modalConfirmPasswordIcon');
+        
+        // Handle modal login form submission
+        const loginForm = document.getElementById('modalLoginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const errorAlert = document.getElementById('loginErrorAlert');
+                const errorMessage = document.getElementById('loginErrorMessage');
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                
+                // Hide previous errors
+                errorAlert.classList.add('d-none');
+                
+                // Disable submit button
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+                
+                const formData = new FormData(this);
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Success - redirect
+                        window.location.href = data.redirect;
+                    } else {
+                        // Show error
+                        if (data.errors && data.errors.email) {
+                            errorMessage.textContent = data.errors.email[0];
+                        } else {
+                            errorMessage.textContent = 'Login failed. Please try again.';
+                        }
+                        errorAlert.classList.remove('d-none');
+                        
+                        // Re-enable submit button
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                    }
+                })
+                .catch(error => {
+                    console.error('Login error:', error);
+                    errorMessage.textContent = 'An error occurred. Please try again.';
+                    errorAlert.classList.remove('d-none');
+                    
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                });
+            });
+        }
+        
+        // Clear login errors when modal is hidden
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) {
+            loginModal.addEventListener('hidden.bs.modal', function() {
+                const errorAlert = document.getElementById('loginErrorAlert');
+                const form = document.getElementById('modalLoginForm');
+                if (errorAlert) {
+                    errorAlert.classList.add('d-none');
+                }
+                if (form) {
+                    form.reset();
+                }
+            });
+        }
+        
+        // Handle modal register form submission
+        const registerForm = document.getElementById('modalRegisterForm');
+        if (registerForm) {
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const errorAlert = document.getElementById('registerErrorAlert');
+                const errorMessage = document.getElementById('registerErrorMessage');
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                
+                // Hide previous errors
+                errorAlert.classList.add('d-none');
+                
+                // Disable submit button
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating account...';
+                
+                const formData = new FormData(this);
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Success - redirect
+                        window.location.href = data.redirect;
+                    } else {
+                        // Show errors
+                        let errorText = '';
+                        if (data.errors) {
+                            const errorList = Object.values(data.errors).flat();
+                            errorText = errorList.join(' ');
+                        } else if (data.message) {
+                            errorText = data.message;
+                        } else {
+                            errorText = 'Registration failed. Please try again.';
+                        }
+                        errorMessage.textContent = errorText;
+                        errorAlert.classList.remove('d-none');
+                        
+                        // Re-enable submit button
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                    }
+                })
+                .catch(error => {
+                    console.error('Registration error:', error);
+                    errorMessage.textContent = 'An error occurred. Please try again.';
+                    errorAlert.classList.remove('d-none');
+                    
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                });
+            });
+        }
+        
+        // Clear register errors when modal is hidden
+        const registerModal = document.getElementById('registerModal');
+        if (registerModal) {
+            registerModal.addEventListener('hidden.bs.modal', function() {
+                const errorAlert = document.getElementById('registerErrorAlert');
+                const form = document.getElementById('modalRegisterForm');
+                if (errorAlert) {
+                    errorAlert.classList.add('d-none');
+                }
+                if (form) {
+                    form.reset();
+                }
+            });
+        }
     });
     </script>
     @stack('scripts')
